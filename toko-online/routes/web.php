@@ -6,6 +6,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RoleController;
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])
@@ -48,3 +50,15 @@ Route::get('/checkout', [CheckoutController::class, 'index'])
 
 Route::post('/checkout', [CheckoutController::class, 'store'])
     ->name('checkout.store');
+
+Route::patch('/admin/users/{user}/role', [RoleController::class, 'update'])
+    ->middleware(['auth', 'can:manage-roles'])
+    ->name('admin.users.role.update');
+
+Route::post('/cart/add/{id_barang}', [CartController::class, 'add'])
+    ->middleware(['auth', 'can:use-cart'])
+    ->name('cart.add');
+
+Route::get('/admin/roles', [RoleController::class, 'index'])
+    ->middleware(['auth', 'can:manage-roles'])
+    ->name('admin.users.roles');
